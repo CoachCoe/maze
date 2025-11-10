@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fog Maze - On-Chain Deterministic Maze Game</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/ethers@6.9.0/dist/ethers.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@polkadot/util@12.6.2/bundle-polkadot-util.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@polkadot/util-crypto@12.6.2/bundle-polkadot-util-crypto.min.js"></script>
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <header>
+      <h1>🌫️ Fog Maze</h1>
+      <p class="subtitle">100% On-Chain Deterministic Maze Game</p>
+      <div class="network-info">
+        <span class="badge">Paseo Asset Hub</span>
+        <span id="walletAddress" class="wallet-address">Not Connected</span>
+      </div>
+    </header>
+
+    <!-- Main Game Area -->
+    <div class="game-wrapper">
+      <!-- Left Panel: Game Canvas -->
+      <div class="game-panel">
+        <div class="canvas-container">
+          <canvas id="mazeCanvas" width="800" height="800"></canvas>
+        </div>
+
+        <div class="controls">
+          <div class="control-row">
+            <label for="levelSelect">Level:</label>
+            <select id="levelSelect">
+              <option value="1">1 - Tutorial (10×10, No Timer)</option>
+              <option value="2">2 - Easy (15×15, 180s)</option>
+              <option value="3">3 - Medium (20×20, 120s)</option>
+              <option value="4">4 - Hard (25×25, 90s)</option>
+              <option value="5">5 - Expert (30×30, 60s)</option>
+            </select>
+          </div>
+
+          <div class="control-row">
+            <button id="connectTalismanBtn" class="btn btn-primary">Connect Talisman</button>
+            <button id="switchAccountBtn" class="btn btn-primary" style="display: none;">Switch Account</button>
+            <button id="connectMetaMaskBtn" class="btn btn-primary" style="display: none;">Connect MetaMask</button>
+            <button id="startBtn" class="btn btn-success" disabled>Start Game</button>
+            <button id="submitBtn" class="btn btn-submit" style="display: none;">Submit to Blockchain</button>
+          </div>
+        </div>
+
+        <div id="status" class="status"></div>
+      </div>
+
+      <!-- Right Panel: Stats and Info -->
+      <div class="info-panel">
+        <!-- Current Game Stats -->
+        <div class="stats-card">
+          <h3>Current Game</h3>
+          <div class="stat-item">
+            <span class="stat-label">Level:</span>
+            <span id="currentLevel" class="stat-value">-</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">Steps:</span>
+            <span id="currentSteps" class="stat-value">0</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">Time:</span>
+            <span id="currentTime" class="stat-value">0</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">Score:</span>
+            <span id="currentScore" class="stat-value">0</span>
+          </div>
+        </div>
+
+        <!-- Player Stats -->
+        <div class="stats-card">
+          <h3>Your Stats</h3>
+          <div class="stat-item">
+            <span class="stat-label">Total Runs:</span>
+            <span id="totalRuns" class="stat-value">0</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">Best Score:</span>
+            <span id="bestScore" class="stat-value">0</span>
+          </div>
+        </div>
+
+        <!-- Instructions -->
+        <div class="stats-card">
+          <h3>
+            How to Play
+            <button id="toggleInstructions" class="btn-link">▼</button>
+          </h3>
+          <div id="instructions">
+            <ul class="instructions-list">
+              <li><strong>Connect</strong> your Talisman or MetaMask wallet</li>
+              <li><strong>Select</strong> a level and click "Start Game"</li>
+              <li><strong>Navigate</strong> using WASD or arrow keys</li>
+              <li><strong>Find</strong> the green exit before time runs out</li>
+              <li><strong>Submit</strong> your run to the blockchain</li>
+            </ul>
+            <p class="address-note"><em>Note: Addresses are displayed in Substrate SS58 format</em></p>
+
+            <div class="game-mechanics">
+              <h4>Game Mechanics</h4>
+              <p><strong>Fog of War:</strong> Only cells near you are visible</p>
+              <p><strong>Score Formula:</strong><br>
+                <code>score = (level × 1000) - (steps × 2 + time × 3)</code>
+              </p>
+              <p><strong>Vision Radius:</strong></p>
+              <ul class="vision-list">
+                <li>Levels 1-2: 3-4 cells</li>
+                <li>Levels 3+: 2 cells</li>
+              </ul>
+            </div>
+
+            <div class="tech-info">
+              <h4>⛓️ Fully On-Chain</h4>
+              <p>Every maze is generated from a blockchain seed. Same seed = same maze. 100% verifiable and reproducible.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Score Breakdown -->
+        <div class="stats-card">
+          <h3>Scoring</h3>
+          <table class="score-table">
+            <tr>
+              <th>Component</th>
+              <th>Points</th>
+            </tr>
+            <tr>
+              <td>Base (Level × 1000)</td>
+              <td class="positive">+</td>
+            </tr>
+            <tr>
+              <td>Steps Penalty (× 2)</td>
+              <td class="negative">-</td>
+            </tr>
+            <tr>
+              <td>Time Penalty (× 3)</td>
+              <td class="negative">-</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+      <p>
+        <strong>Fog Maze</strong> - Unstoppable, Verifiable, Deterministic
+        <br>
+        <span class="tech-badge">Solidity</span>
+        <span class="tech-badge">Ethers.js</span>
+        <span class="tech-badge">Paseo Asset Hub</span>
+      </p>
+    </footer>
+  </div>
+
+  <!-- Load scripts -->
+  <script src="address-utils.js"></script>
+  <script src="maze.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
