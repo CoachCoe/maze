@@ -1,16 +1,10 @@
 {
   "version": 2,
   "name": "fog-maze",
-  "builds": [
+  "rewrites": [
     {
-      "src": "docs/**",
-      "use": "@vercel/static"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "/docs/$1"
+      "source": "/(.*)",
+      "destination": "/docs/$1"
     }
   ],
   "headers": [
