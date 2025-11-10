@@ -651,8 +651,14 @@ class FogMazeGame {
 
   /**
    * Reveal area around player (fog of war)
+   * Now only shows current visible area, not permanent exploration
    */
   revealArea(cx, cy, radius) {
+    // Clear all revealed cells except the exit
+    this.revealed.clear();
+    this.revealed.add(`${this.exitPos.x},${this.exitPos.y}`);
+
+    // Only reveal cells within vision radius
     for (let y = cy - radius; y <= cy + radius; y++) {
       for (let x = cx - radius; x <= cx + radius; x++) {
         if (x >= 0 && x < this.maze.length && y >= 0 && y < this.maze.length) {
