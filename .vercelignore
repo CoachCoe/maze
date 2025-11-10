@@ -1,0 +1,11 @@
+node_modules
+.env
+cache
+artifacts
+frontend/contract-address.json
+frontend/FogMaze.abi.json
+test
+scripts
+contracts
+hardhat.config.js
+.github

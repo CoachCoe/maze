@@ -47,6 +47,12 @@ A fully on-chain, single-player maze game deployed on Paseo Asset Hub (Polkadot 
 - Talisman wallet
 - PAS tokens (Paseo Asset Hub testnet)
 
+## 🎮 Try the Demo
+
+**Play instantly without setup:** [https://fog-maze.vercel.app](https://fog-maze.vercel.app)
+
+No wallet required for the demo! Just visit the link and start playing.
+
 ## 🚀 Quick Start
 
 ### 1. Installation
