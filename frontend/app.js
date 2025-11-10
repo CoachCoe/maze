@@ -68,7 +68,6 @@ class FogMazeGame {
   initializeEventListeners() {
     document.getElementById("connectTalismanBtn")?.addEventListener("click", () => this.connectWallet('talisman'));
     document.getElementById("switchAccountBtn")?.addEventListener("click", () => this.switchAccount());
-    document.getElementById("connectMetaMaskBtn")?.addEventListener("click", () => this.connectWallet('metamask'));
     document.getElementById("startBtn").addEventListener("click", () => this.startNewGame());
     document.getElementById("submitBtn").addEventListener("click", () => this.submitRun());
     document.getElementById("levelSelect").addEventListener("change", (e) => {
@@ -259,16 +258,15 @@ class FogMazeGame {
   }
 
   /**
-   * Connect to Talisman or MetaMask wallet
+   * Connect to Talisman wallet
    */
   async connectWallet(walletType = 'auto') {
     try {
       let ethereum;
 
-      console.log('Available wallets:', {
+      console.log('Talisman wallet detection:', {
         talismanEth: !!window.talismanEth,
         ethereumIsTalisman: window.ethereum?.isTalisman,
-        ethereumIsMetaMask: window.ethereum?.isMetaMask,
         ethereumProviders: window.ethereum?.providers?.length
       });
 
@@ -293,14 +291,6 @@ class FogMazeGame {
           console.log("Using Talisman wallet (ethereum.isTalisman)");
         } else {
           alert("Talisman wallet not detected!\n\nPlease:\n1. Make sure Talisman is installed\n2. Try disabling MetaMask temporarily\n3. Refresh the page and try again");
-          return;
-        }
-      } else if (walletType === 'metamask') {
-        if (window.ethereum?.isMetaMask) {
-          ethereum = window.ethereum;
-          console.log("Using MetaMask wallet");
-        } else {
-          alert("MetaMask wallet not found! Please install MetaMask extension.");
           return;
         }
       } else {
@@ -369,14 +359,10 @@ class FogMazeGame {
 
       // Update wallet buttons
       const talismanBtn = document.getElementById("connectTalismanBtn");
-      const metamaskBtn = document.getElementById("connectMetaMaskBtn");
       const switchBtn = document.getElementById("switchAccountBtn");
 
       if (talismanBtn) {
         talismanBtn.style.display = "none";
-      }
-      if (metamaskBtn) {
-        metamaskBtn.style.display = "none";
       }
       if (switchBtn) {
         switchBtn.style.display = "inline-block";

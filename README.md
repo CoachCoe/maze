@@ -44,7 +44,7 @@ A fully on-chain, single-player maze game deployed on Paseo Asset Hub (Polkadot 
 ## 📋 Prerequisites
 
 - Node.js v16+ and npm
-- Talisman or MetaMask wallet
+- Talisman wallet
 - PAS tokens (Paseo Asset Hub testnet)
 
 ## 🚀 Quick Start
@@ -104,7 +104,7 @@ npx hardhat test test/FogMaze.test.js
 ## 📖 How to Play
 
 ### Setup
-1. **Connect Wallet**: Click "Connect Wallet" and approve Talisman or MetaMask
+1. **Connect Wallet**: Click "Connect Talisman" and approve the connection
 2. **Add Network**: The app will prompt you to add Paseo Asset Hub to your wallet
 3. **Get Testnet Tokens**: Visit [Polkadot Faucet](https://faucet.polkadot.io/) to get PAS tokens
 4. **Address Format**: Your address will be displayed in Substrate SS58 format (native to Polkadot)
@@ -308,9 +308,10 @@ The app will automatically prompt you to add the network. Manual configuration:
 - Ensure FogMaze.abi.json was generated
 
 ### Wallet not connecting
-- Install Talisman or MetaMask
+- Install Talisman wallet extension
 - Check you're not in private/incognito mode
 - Try refreshing the page
+- Use the "Switch Account" button if you have multiple Talisman accounts
 
 ## 🤝 Contributing
 
